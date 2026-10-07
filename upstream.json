@@ -1,0 +1,17 @@
+{
+  "skills": {
+    "repository": "https://github.com/coderabbitai/skills",
+    "commit": "59945da347a93f9937d3fb09f5ba81a16010351f"
+  },
+  "cursor": {
+    "repository": "https://github.com/coderabbitai/cursor-plugin",
+    "commit": "ec858d6b6b26949e0004d9f41b66be9c5d9321b2"
+  },
+  "generated": [
+    "LICENSE",
+    "skills/coderabbit-review/SKILL.md",
+    "skills/coderabbit-review/references/auth-recovery.md",
+    "skills/coderabbit-review/references/cli-workflows.md",
+    "skills/coderabbit-autofix/SKILL.md"
+  ]
+}

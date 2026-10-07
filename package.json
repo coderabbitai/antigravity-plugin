@@ -1,0 +1,17 @@
+{
+  "name": "@coderabbit/antigravity-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Native CodeRabbit plugin package for Google Antigravity",
+  "license": "MIT",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "validate": "node scripts/validate-plugin.mjs",
+    "test": "node --test",
+    "check": "npm run validate && npm test",
+    "sync:upstream": "node scripts/sync-upstream.mjs",
+    "package": "npm run validate && python3 scripts/package-plugin.py"
+  },
+  "devDependencies": { "yaml": "2.9.1" }
+}
