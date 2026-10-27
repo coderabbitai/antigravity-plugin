@@ -8,7 +8,7 @@ version = json.loads((root / 'package.json').read_text())['version']
 out = root / 'dist' / f'coderabbit-antigravity-{version}.zip'
 out.parent.mkdir(exist_ok=True)
 files = [root / name for name in ('plugin.json', 'README.md', 'LICENSE', 'CONTRIBUTING.md', 'SECURITY.md')]
-for folder in ('skills', 'agents', 'rules', 'docs'):
+for folder in ('assets', 'skills', 'agents', 'rules', 'docs'):
     files.extend(p for p in (root / folder).rglob('*') if p.is_file())
 with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as archive:
     for path in sorted(files):

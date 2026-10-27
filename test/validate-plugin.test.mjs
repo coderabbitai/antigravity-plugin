@@ -21,6 +21,28 @@ test('rejects Cursor metadata in the Antigravity manifest', async t => {
   await writeFile(join(root, 'plugin.json'), JSON.stringify({ name: 'coderabbit', publisher: 'CodeRabbit' }));
   assert.ok((await validatePlugin(root)).some(error => error.includes('publisher')));
 });
+test('accepts Antigravity listing metadata', async t => {
+  const root = await fixture(t);
+  await mkdir(join(root, 'assets'));
+  await writeFile(join(root, 'assets/logo.png'), 'png');
+  await writeFile(join(root, 'package.json'), JSON.stringify({ version: '1.0.0' }));
+  await writeFile(join(root, 'plugin.json'), JSON.stringify({
+    name: 'coderabbit', displayName: 'CodeRabbit', version: '1.0.0', logo: 'assets/logo.png',
+    author: { name: 'CodeRabbit', url: 'https://coderabbit.ai' }, license: 'MIT',
+  }));
+  assert.deepEqual(await validatePlugin(root), []);
+});
+test('catches a missing logo, drifted version, and malformed author', async t => {
+  const root = await fixture(t);
+  await writeFile(join(root, 'package.json'), JSON.stringify({ version: '1.0.0' }));
+  await writeFile(join(root, 'plugin.json'), JSON.stringify({
+    name: 'coderabbit', version: '0.9.0', logo: 'assets/logo.png', author: { name: 'CodeRabbit', publisher: 'CodeRabbit' },
+  }));
+  const errors = await validatePlugin(root);
+  assert.ok(errors.some(error => error.startsWith('Logo must be')));
+  assert.ok(errors.some(error => error.includes('version must match')));
+  assert.ok(errors.some(error => error.includes('author')));
+});
 test('catches a rule that Antigravity would silently ignore', async t => {
   const root = await fixture(t);
   await mkdir(join(root, 'rules'));

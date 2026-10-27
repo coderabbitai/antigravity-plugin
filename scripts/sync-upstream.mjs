@@ -20,7 +20,7 @@ for (const [path, pin] of [[skills, lock.skills], [cursor, lock.cursor]]) {
   if (commit !== pin.commit) throw new Error(`Expected ${pin.repository} at ${pin.commit}, got ${commit}`);
   // Read committed blobs rather than potentially modified working-tree files.
 }
-const blob = (path, file) => execFileSync('git', ['-C', path, 'show', `HEAD:${file}`], { encoding: 'utf8' });
+const blob = (path, file, encoding = 'utf8') => execFileSync('git', ['-C', path, 'show', `HEAD:${file}`], { encoding });
 const replaceExactlyOnce = (text, before, after) => {
   if (text.split(before).length !== 2) throw new Error('Upstream adaptation target changed; review the transformation.');
   return text.replace(before, after);
@@ -62,6 +62,7 @@ autofix = replaceExactlyOnce(autofix,
 
 const outputs = new Map([
   ['LICENSE', blob(skills, 'LICENSE')],
+  ['assets/logo.png', blob(skills, 'assets/logo.png', 'buffer')],
   ['skills/coderabbit-review/SKILL.md', review],
   ['skills/coderabbit-review/references/auth-recovery.md', auth],
   ['skills/coderabbit-review/references/cli-workflows.md', blob(skills, 'skills/code-review/references/cli-workflows.md')],
@@ -73,7 +74,7 @@ if (JSON.stringify([...outputs.keys()].sort()) !== JSON.stringify([...lock.gener
 for (const [file, content] of outputs) {
   const target = resolve(root, file);
   if (check) {
-    if (await readFile(target, 'utf8') !== content) throw new Error(`Generated file differs: ${file}`);
+    if (!(await readFile(target)).equals(Buffer.from(content))) throw new Error(`Generated file differs: ${file}`);
   } else {
     await mkdir(dirname(target), { recursive: true });
     await writeFile(target, content);

@@ -1,5 +1,12 @@
 {
   "$schema": "https://antigravity.google/schemas/v1/plugin.json",
   "name": "coderabbit",
-  "description": "CodeRabbit code review and guarded autofix for Antigravity."
+  "displayName": "CodeRabbit",
+  "description": "AI-powered code review and review-comment autofix, powered by CodeRabbit.",
+  "version": "0.1.0",
+  "logo": "assets/logo.png",
+  "author": { "name": "CodeRabbit", "url": "https://coderabbit.ai" },
+  "homepage": "https://docs.coderabbit.ai/cli",
+  "repository": "https://github.com/coderabbitai/antigravity-plugin",
+  "license": "MIT"
 }
