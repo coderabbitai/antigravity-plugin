@@ -27,7 +27,7 @@ for the actual upload or repository-link step.
 
 - Name: CodeRabbit
 - Source: https://github.com/coderabbitai/antigravity-plugin
-- Description: CodeRabbit code review and guarded autofix for Antigravity.
+- Description: AI-powered code review and review-comment autofix, powered by CodeRabbit.
 - Package version: 0.1.0
 - Components: two skills, two agents, one routing rule
 - Requirements: Git, CodeRabbit CLI, and GitHub CLI for existing PR feedback
@@ -35,9 +35,10 @@ for the actual upload or repository-link step.
 - MCP server: none
 - License: MIT
 
-The native manifest uses Google's [documented plugin format](https://antigravity.google/docs/plugins).
-Listing information such as branding and version stays separate from unsupported
-manifest properties.
+The native manifest uses Google's [documented plugin format](https://antigravity.google/docs/plugins)
+and [manifest schema](https://antigravity.google/schemas/v1/plugin.json). It
+carries the listing name, description, version, logo, author, homepage,
+repository, and license.
 
 Submit with the designated CodeRabbit contact. Record Google's response and
 listing URL here once confirmed. Do not change the README to claim Marketplace

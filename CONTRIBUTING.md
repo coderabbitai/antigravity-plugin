@@ -41,13 +41,15 @@ diff. CI verifies both structure and reproducibility from the pinned commits.
 ## Checks
 
 Run `npm ci`, `npm run check`, and `npm run package`. The package validator catches
-unsupported manifest fields, malformed YAML, invalid routing triggers, missing
+unsupported or mistyped manifest fields, a missing logo, a manifest version that
+differs from `package.json`, malformed YAML, invalid routing triggers, missing
 references, unmapped tools, and symlinks in component directories. Regression
 tests exercise failures that can prevent components from loading.
 
-The `$schema` URL is included as Google's manifest example recommends. The URL
-returned HTTP 404 during initial preparation, so validation checks the fields
-documented on the Plugins page rather than claiming remote-schema validation.
+The `$schema` URL points at Google's published
+[manifest schema](https://antigravity.google/schemas/v1/plugin.json). The
+validator mirrors that schema's listing fields locally and does not fetch it.
+When the Antigravity CLI is available, also run `agy plugin validate .`.
 
 Keep agent tool names compatible with the
 [official agent specification](https://antigravity.google/docs/subagents).

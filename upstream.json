@@ -9,6 +9,7 @@
   },
   "generated": [
     "LICENSE",
+    "assets/logo.png",
     "skills/coderabbit-review/SKILL.md",
     "skills/coderabbit-review/references/auth-recovery.md",
     "skills/coderabbit-review/references/cli-workflows.md",

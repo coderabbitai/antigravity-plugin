@@ -17,12 +17,30 @@ export async function validatePlugin(inputRoot) {
   try { manifest = JSON.parse(await readFile(resolve(root, 'plugin.json'), 'utf8')); }
   catch (error) { return [`Cannot read plugin.json: ${error.message}`]; }
   if (!manifest || typeof manifest !== 'object' || Array.isArray(manifest)) return ['plugin.json must be an object'];
-  for (const key of Object.keys(manifest)) {
-    if (!['$schema', 'name', 'description'].includes(key)) fail(`Unsupported manifest property: ${key}`);
+  const isText = value => typeof value === 'string';
+  const isTextList = value => Array.isArray(value) && value.every(isText);
+  // Listing fields from https://antigravity.google/schemas/v1/plugin.json. Aliases, deprecated
+  // import fields, and loading overrides (disabled, skills, extensions) are left out on purpose.
+  const manifestFields = {
+    $schema: isText, name: isText, displayName: isText, description: isText, version: isText,
+    logo: isText, homepage: isText, repository: isText, license: isText, keywords: isTextList,
+    suggestedPrompts: value => isTextList(value) && value.length <= 3 && value.every(prompt => prompt.trim()),
+    author: value => isText(value) || (!!value && typeof value === 'object' && !Array.isArray(value)
+      && Object.entries(value).every(([key, text]) => ['name', 'email', 'url'].includes(key) && isText(text))),
+  };
+  for (const [key, value] of Object.entries(manifest)) {
+    if (!Object.hasOwn(manifestFields, key)) fail(`Unsupported manifest property: ${key}`);
+    else if (!manifestFields[key](value)) fail(`Invalid manifest ${key}`);
   }
   if (typeof manifest.name !== 'string' || !/^[a-zA-Z0-9_-]+$/.test(manifest.name)) fail('Invalid plugin name');
-  if (manifest.description !== undefined && typeof manifest.description !== 'string') fail('Invalid plugin description');
   if (manifest.$schema !== undefined && manifest.$schema !== 'https://antigravity.google/schemas/v1/plugin.json') fail('Unexpected plugin schema URL');
+  if (isText(manifest.logo)) {
+    const logo = resolve(root, manifest.logo);
+    if (!/\.(png|svg|jpe?g|webp)$/i.test(manifest.logo) || !isInside(root, logo)) fail(`Unsupported logo path: ${manifest.logo}`);
+    else if (!(await lstat(logo).catch(() => null))?.isFile() || !isInside(root, await realpath(logo))) fail(`Logo must be a regular file inside the package: ${manifest.logo}`);
+  }
+  const pkg = await readFile(resolve(root, 'package.json'), 'utf8').then(JSON.parse, () => undefined);
+  if (pkg && manifest.version !== pkg.version) fail(`plugin.json version must match package.json (${pkg.version})`);
 
   const walk = async dir => {
     const files = [];

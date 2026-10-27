@@ -97,6 +97,7 @@ This workflow does not create a new PR or automatically publish comments.
 
 ```text
 plugin.json
+assets/logo.png
 skills/
   coderabbit-review/SKILL.md
   coderabbit-review/references/
@@ -108,9 +109,9 @@ rules/
   coderabbit-review-routing.md
 ```
 
-The root manifest uses Antigravity's format. Branding and package version live in
-this README and development metadata, rather than unsupported manifest fields.
-Skills and agents are adapted from pinned CodeRabbit sources. See
+The root manifest uses Antigravity's format, including the display name, version,
+logo, and author shown in plugin listings. Its version matches `package.json`.
+Skills, agents, and the logo are adapted from pinned CodeRabbit sources. See
 [upstream maintenance](CONTRIBUTING.md).
 
 ## Development and Marketplace submission
