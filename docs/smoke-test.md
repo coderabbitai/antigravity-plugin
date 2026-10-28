@@ -86,6 +86,10 @@ Use an explicitly designated test PR that CodeRabbit has reviewed.
 - Repeated the same request in a fresh app conversation. It discovered the existing
   CLI, verified its version and authentication, and reused it without downloading
   or running the installer. The binary's hash and modification time were unchanged.
+  A subagent execution restriction was handed back to the main agent, which ran
+  the review through a normal one-time approval. This second invocation returned
+  `reused: true` and explicitly reported that no fresh detailed file review ran.
+  It verifies CLI reuse and permission handoff, not a second independent analysis.
 
 The signed-out login handoff, Linux installation, denied permissions, failed
 downloads, untrusted executable handling, existing-PR autofix, and partial review
