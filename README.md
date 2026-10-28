@@ -7,21 +7,25 @@ unresolved CodeRabbit feedback on existing GitHub pull requests.
 ## Status
 
 Initial package, version 0.1.0. The repository has package validation, regression
-tests, and reproducible upstream imports. Loading and running the plugin in
-Antigravity still requires the [smoke test](docs/smoke-test.md).
+tests, and reproducible upstream imports. First-use CLI installation and an
+uncommitted review have been tested in the local Antigravity app on macOS;
+see the [smoke test](docs/smoke-test.md) for results and remaining scenarios.
 Marketplace review and publication are pending.
 
 ## Requirements
 
 - Google Antigravity with native plugin support.
 - Git and a project in an initialized Git repository.
-- [CodeRabbit CLI](https://docs.coderabbit.ai/cli) installed from an official source
-  and authenticated in the environment where the review runs.
+- [CodeRabbit CLI](https://docs.coderabbit.ai/cli) authenticated in the environment
+  where the review runs. On macOS and Linux, the main agent installs a missing
+  CLI from the official installer when you first request a review, subject to
+  Antigravity's execution permissions. Existing trusted installations are reused.
 - GitHub CLI (`gh`) authenticated for existing GitHub PR autofix workflows.
 
 CodeRabbit reviews send the selected code diff to the CodeRabbit API. Use the
 review scope you intend to share, and exclude secrets. The plugin does not
-include an MCP server or automatically install software.
+include an MCP server. First-use CLI setup requires `curl`, `unzip`, and a POSIX
+shell. Sign-in remains a user step in the terminal when prompted.
 
 ## Install
 
@@ -73,8 +77,9 @@ See Google's [skill invocation documentation](https://antigravity.google/docs/sk
 
 ### Local coding, review, and fix
 
-The review skill checks the selected repository and authentication, then runs the
-trusted CodeRabbit CLI with `review --agent` and the requested scope. It reports
+The main agent checks for the CLI and installs it if missing, then verifies its
+version. The review skill checks the selected repository and authentication,
+then runs the trusted CodeRabbit CLI with `review --agent` and the requested scope. It reports
 the findings at their original severity. If you request fixes, the agent checks
 the code, applies authorized changes, and runs relevant validation. Review loops
 use your run limit or at most three review invocations per change set.

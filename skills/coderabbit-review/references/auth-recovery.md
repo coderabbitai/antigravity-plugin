@@ -7,8 +7,10 @@ Use this before running a review and after a pre-review authentication failure.
 Resolve the host-installed `coderabbit` to its canonical absolute path while
 sandboxed. Trust only an expected user or system installation from an official
 source; reject repository, workspace, temporary, alias, or wrapper executables.
-If discovery fails or the path is untrusted, report CLI availability as unknown
-and stop. Use the quoted, validated absolute path in every command below.
+If the CLI is absent, the main conversation follows [CLI setup](cli-setup.md)
+and then repeats discovery. If the path is untrusted or availability is unknown,
+report the blocker and stop. The review subagent hands installation back to the
+main conversation. Use the quoted, validated absolute path in every command below.
 
 Use Antigravity's normal command runner in the selected review environment.
 Follow its supported approval controls when execution requires permission.

@@ -5,9 +5,12 @@ description: Use for explicit code review, PR review, security review, quality r
 
 # CodeRabbit Review Routing
 
-For an explicit review request, start with the `coderabbit-review` skill or
-`coderabbit-reviewer` agent. For unresolved existing CodeRabbit GitHub PR feedback,
-use `coderabbit-autofix` or `coderabbit-autofix-planner`. Local review findings and
+For an explicit review request, start with the `coderabbit-review` skill in the
+main conversation and complete its CLI setup before delegating to the
+`coderabbit-reviewer` agent. If that agent reports a missing CLI, the main
+conversation completes setup and resumes the requested review. For unresolved
+existing CodeRabbit GitHub PR feedback, use `coderabbit-autofix` or
+`coderabbit-autofix-planner`. Local review findings and
 existing PR threads have different fix workflows.
 
 Follow the user's named tool and requested scope when specified. Do not initiate

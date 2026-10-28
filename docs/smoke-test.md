@@ -1,8 +1,8 @@
 # Antigravity Runtime Smoke Test
 
-Status: not yet run. Initial preparation could validate package files but did not
-have an Antigravity CLI executable available. Static checks do not verify that
-Antigravity loads or executes the plugin.
+Status: first-use installation and an uncommitted review tested in the local
+Antigravity app on October 28, 2026. See the results below for the tested scope.
+The remaining scenarios in this checklist still require runtime testing.
 
 Use a disposable Git project with no secrets. Record the plugin commit,
 Antigravity surface/version, CodeRabbit CLI version, operating system, and results.
@@ -17,6 +17,18 @@ Antigravity surface/version, CodeRabbit CLI version, operating system, and resul
 5. Ask for a CodeRabbit review and confirm the agent follows the bundled workflow.
 
 ## Review and local fixes
+
+First test setup in a disposable macOS or Linux environment without CodeRabbit:
+
+1. Request a review and confirm the main agent downloads and inspects the official
+   installer, installs with login skipped, and verifies the resulting CLI version.
+2. Confirm authentication is checked next and missing login is handed to the user.
+3. Request another review and confirm the existing CLI is reused without installation.
+4. Test a CLI in `~/.local/bin` outside PATH, a denied install permission, a failed
+   download, and an untrusted executable. Confirm no duplicate install, permission
+   bypass, review without prerequisites, or false success claim.
+5. Request a review through the reviewer subagent with no CLI. Confirm setup is
+   handed to the main conversation before the review resumes.
 
 1. Make a small tracked change with a known correctness issue.
 2. Ask to review uncommitted changes with CodeRabbit.
@@ -47,5 +59,35 @@ Use an explicitly designated test PR that CodeRabbit has reviewed.
 
 ## Results
 
-Replace this section with dated evidence after testing. Until then, keep runtime
-verification and Marketplace publication marked as pending.
+### October 28, 2026: local macOS first-use setup
+
+- Environment: macOS 15.6 on arm64, Antigravity app 2.19.1, Local execution.
+- Removed the existing plugin with `agy plugin uninstall coderabbit` and removed
+  the CodeRabbit CLI and `cr` alias from their installed locations, retaining
+  recovery copies outside PATH. Confirmed neither command was discoverable.
+- Installed the updated local package with `agy plugin install <source-directory>`.
+  `agy plugin list` reported two skills and two agents. The installed review
+  skill and setup reference matched the source files.
+- Created a disposable Git repository containing a small tracked JavaScript
+  change. Asked the app to review uncommitted changes with CodeRabbit and leave
+  source files unchanged, without additional installation instructions.
+- The main agent loaded the routing rule, review skill, setup reference, and
+  authentication reference. It checked for the missing CLI, downloaded and read
+  the official installer, installed with `CR_CLI_SKIP_LOGIN=1`, and verified
+  CodeRabbit CLI 0.9.1 at the default user installation path.
+- Download, installer inspection, installation, version verification, and review
+  used the app's normal permission controls. One-time approvals were provided;
+  sandbox settings and permanent permission rules were not changed.
+- Existing CodeRabbit authentication was recognized. The reviewer ran
+  `coderabbit review --agent --uncommitted` and received a terminal
+  `review_completed` event with `outcome: completed`, `reviewedFiles: ["discount.js"]`,
+  and zero findings. The main agent reported completion and kept its own arithmetic
+  observation separate from the CodeRabbit findings. The source file was unchanged.
+- Repeated the same request in a fresh app conversation. It discovered the existing
+  CLI, verified its version and authentication, and reused it without downloading
+  or running the installer. The binary's hash and modification time were unchanged.
+
+The signed-out login handoff, Linux installation, denied permissions, failed
+downloads, untrusted executable handling, existing-PR autofix, and partial review
+scenarios have not been exercised in this runtime test. Marketplace publication
+is still pending.

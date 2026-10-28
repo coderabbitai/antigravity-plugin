@@ -32,6 +32,12 @@ review = replaceExactlyOnce(review,
   'AI-powered code review using CodeRabbit. Enables developers to implement features, review code, and fix issues in autonomous cycles without manual intervention.',
   'Run CodeRabbit reviews from Antigravity and apply independently validated fixes within the user\'s authorized scope.');
 review = replaceExactlyOnce(review,
+  '### 1. Check CLI and Authentication',
+  '### 1. Check CLI and Authentication\n\nThe main conversation first follows [CLI setup](references/cli-setup.md), installing\na missing CLI before delegating a review. Existing trusted installations\nare reused. The review subagent returns setup blockers to the main conversation.');
+review = replaceExactlyOnce(review,
+  '- **Installation**: install the CLI via a package manager or verified binary. Do not pipe remote scripts to a shell.',
+  '- **Installation**: follow [CLI setup](references/cli-setup.md) in the main conversation. Download and inspect the official installer before running it; never pipe remote scripts to a shell.');
+review = replaceExactlyOnce(review,
   '6. Report remaining findings and stop when the requested fixes are verified; avoid unbounded review loops',
   '6. Use the user\'s review-run limit, or at most three review invocations per change set. Report remaining findings and any edits not re-reviewed at the limit.');
 review = replaceExactlyOnce(review,
@@ -39,6 +45,9 @@ review = replaceExactlyOnce(review,
   'Inspect the terminal `type: complete` event and process exit status. A `review_completed` event with `outcome: failed` or a positive `unreviewedFileCount` is incomplete; retain any findings as partial and report the emitted reason. Warnings alone and absent legacy outcome fields are not failures. A nonzero exit or exit without a terminal completion event is failed or incomplete. State a finding count only when emitted or countable from a complete collection.\n\nCreate a task list for issues found that need to be addressed.');
 
 let auth = blob(skills, 'skills/code-review/references/auth-recovery.md');
+auth = replaceExactlyOnce(auth,
+  'If discovery fails or the path is untrusted, report CLI availability as unknown\nand stop.',
+  'If the CLI is absent, the main conversation follows [CLI setup](cli-setup.md)\nand then repeats discovery. If the path is untrusted or availability is unknown,\nreport the blocker and stop. The review subagent hands installation back to the\nmain conversation.');
 const boundaryStart = auth.indexOf('In a local agent sandbox,');
 const boundaryEnd = auth.indexOf('Host-native agents use their normal shell.');
 if (boundaryStart < 0 || boundaryEnd < boundaryStart) throw new Error('Auth adaptation target changed.');

@@ -18,6 +18,8 @@ Current transformations:
 - Bound local fix-review loops and reject incomplete output as clean evidence.
 - Adapt the shared authentication guidance to Antigravity's supported command
   runner, permission controls, and manual terminal handoff.
+- Route missing CLI setup to the main conversation and the locally maintained
+  `skills/coderabbit-review/references/cli-setup.md` before delegating reviews.
 - Replace Cursor references in the PR autofix skill with Antigravity.
 - Preserve CodeRabbit severity instead of mapping it to different labels.
 - Require relevant repository validation before publishing PR fixes.
