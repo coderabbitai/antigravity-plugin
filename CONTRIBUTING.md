@@ -27,7 +27,7 @@ checkouts that do not match the pins.
 
 ```bash
 git clone https://github.com/coderabbitai/skills.git /tmp/coderabbit-skills
-git -C /tmp/coderabbit-skills checkout 59945da347a93f9937d3fb09f5ba81a16010351f
+git -C /tmp/coderabbit-skills checkout 8eef1037a977f2bc54368affb3b0d650f368e42a
 git clone https://github.com/coderabbitai/cursor-plugin.git /tmp/coderabbit-cursor
 git -C /tmp/coderabbit-cursor checkout ec858d6b6b26949e0004d9f41b66be9c5d9321b2
 npm run sync:upstream -- --skills-root /tmp/coderabbit-skills --cursor-root /tmp/coderabbit-cursor

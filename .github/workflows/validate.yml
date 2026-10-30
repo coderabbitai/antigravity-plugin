@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: coderabbitai/skills
-          ref: 59945da347a93f9937d3fb09f5ba81a16010351f
+          ref: 8eef1037a977f2bc54368affb3b0d650f368e42a
           path: .upstream/skills
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
