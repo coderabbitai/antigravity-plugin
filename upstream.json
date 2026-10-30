@@ -1,7 +1,7 @@
 {
   "skills": {
     "repository": "https://github.com/coderabbitai/skills",
-    "commit": "59945da347a93f9937d3fb09f5ba81a16010351f"
+    "commit": "8eef1037a977f2bc54368affb3b0d650f368e42a"
   },
   "cursor": {
     "repository": "https://github.com/coderabbitai/cursor-plugin",

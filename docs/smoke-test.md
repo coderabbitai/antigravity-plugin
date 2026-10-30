@@ -1,8 +1,8 @@
 # Antigravity Runtime Smoke Test
 
-Status: not yet run. Initial preparation could validate package files but did not
-have an Antigravity CLI executable available. Static checks do not verify that
-Antigravity loads or executes the plugin.
+Status: partially run on 2026-10-30. Discovery and an uncommitted-change review
+passed in Antigravity CLI. The remaining steps have not been run; see
+[Results](#results).
 
 Use a disposable Git project with no secrets. Record the plugin commit,
 Antigravity surface/version, CodeRabbit CLI version, operating system, and results.
@@ -47,5 +47,48 @@ Use an explicitly designated test PR that CodeRabbit has reviewed.
 
 ## Results
 
-Replace this section with dated evidence after testing. Until then, keep runtime
-verification and Marketplace publication marked as pending.
+Keep runtime verification and Marketplace publication marked as pending until
+the remaining steps pass.
+
+### 2026-10-30: Antigravity CLI 1.4.10, macOS 15.6 arm64
+
+- Plugin commit `83e4be0`, skills pin `59945da`.
+- CodeRabbit CLI 0.9.1, already installed and signed in.
+- Surface: Antigravity CLI print mode (`agy -p`) with the default model.
+
+Discovery (steps 1 to 3 and 5):
+
+- `agy plugin install https://github.com/coderabbitai/antigravity-plugin` in a
+  separate profile installed two skills (`coderabbit-autofix`,
+  `coderabbit-review`), two agents (`coderabbit-autofix-planner`,
+  `coderabbit-reviewer`), and one rule (`coderabbit-review-routing`).
+- `agy plugin validate --strict .` passed. Its only note is the missing logo.
+- The review run loaded a workspace copy from `.agents/plugins/` with a test-only
+  manifest name, because an installed Marketplace `coderabbit` plugin uses the
+  same plugin name. The Marketplace plugin was disabled during the run.
+
+Review (steps 1 to 3 and 5):
+
+- A disposable repository had two known bugs in one tracked file: an off-by-one
+  loop bound and an assignment inside a lookup predicate.
+- Prompt: review uncommitted changes with CodeRabbit, list every finding with its
+  severity, and do not edit files.
+- The agent read the routing rule, the `coderabbit-review` skill, and
+  `references/auth-recovery.md`. It ran `git status`, `git diff`,
+  `auth status --agent`, and `review --agent --uncommitted`, which took 80 seconds.
+- CodeRabbit returned two `major` findings, one for each bug. The agent reported
+  both with native severity, completion status, and the proposed diffs. No files
+  changed.
+
+Headless permission finding:
+
+- The bundled guidance runs the CLI through a quoted absolute path. Antigravity
+  allow rules did not match the quoted command name, so print mode denied
+  `review --agent` even with explicit allow rules. Interactive sessions show an
+  approval prompt instead.
+- The recorded run told the agent to use the same absolute path without quotes.
+  Headless or CI use needs either that change or an interactive approval.
+
+Not run: slash command availability (step 4 of Discovery), sign-in handoff, fixes
+and re-review, untracked files, failed or partial reviews, all existing PR
+feedback steps, and the Antigravity App and IDE surfaces.
